@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang-ar="BY MARI - إتمام الطلب" data-lang-en="BY MARI - Checkout">BY MARI - إتمام الطلب</title>
+    <link rel="stylesheet" href="memo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- مكتبة EmailJS للإرسال الخفي -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // تم وضع الـ Public Key الخاص بك هنا
+            emailjs.init("cFZd9hmBfBPg5X5F6");
+        })();
+    </script>
+    <style>
+        body {
+            background-color: #e5efe9;
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .checkout-page {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            align-items: start;
+        }
+        .summary-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .summary-item-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .summary-item-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            position: relative;
+        }
+        .item-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #333;
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .promo-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .promo-box input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+        }
+        .promo-box button {
+            padding: 0 20px;
+            background: #366c65;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: #333;
+        }
+        .totals-row.final {
+            font-size: 20px;
+            font-weight: 700;
+            color: #000;
+            border-top: 1px solid #ccc;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        .form-section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #222;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: 13px;
+            color: #444;
+            cursor: pointer;
+        }
+        .checkbox-group input {
+            width: 16px;
+            height: 16px;
+            accent-color: #366c65;
+        }
+        .shipping-method-box {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .payment-methods-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .payment-item {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .payment-item.active {
+            border: 2px solid #366c65;
+            background: #f4f8f7;
+        }
+        .payment-item input[type="radio"] {
+            accent-color: #366c65;
+            width: 16px;
+            height: 16px;
+        }
+        .btn-complete-order {
+            width: 100%;
+            background-color: #366c65;
+            color: #fff;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .btn-complete-order:hover {
+            background-color: #2b5550;
+        }
+        
+        /* تنسيقات صفحة التأكيد والنجاح */
+        .hidden {
+            display: none !important;
+        }
+        .success-container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: right;
+        }
+        .success-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .success-title-area h2 {
+            margin: 0 0 5px 0;
+            font-size: 22px;
+            color: #222;
+        }
+        .success-title-area p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .success-box-card {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .success-box-card h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #366c65;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .success-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .site-footer {
+            background-color: #1b3834;
+            color: #e2dcd6;
+            padding: 40px 0 20px 0;
+            margin-top: 60px;
+        }
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255,.1);
+            padding-top: 15px;
+            font-size: 13px;
+            color: #aaa;
+        }
+        @media (max-width: 768px) {
+            .checkout-grid { grid-template-columns: 1fr; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero-header" style="background: rgba(54, 108, 101, 0.95); position: relative; top: 0; padding: 15px 0;">
+        <div class="container header-container" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <a href="MEMO.HTML" class="logo" style="text-decoration: none; color: #fff; font-size: 22px; font-weight: bold;">BY MARI</a>
+            <button id="langToggleBtn" class="lang-btn" style="background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; padding: 5px 10px; border-radius: 20px; cursor: pointer;">English 🌐</button>
+        </div>
+    </header>
+
+    <div class="checkout-page">
+        
+        <!-- 1. نموذج صفحة الدفع الأساسية -->
+        <div class="checkout-grid" id="checkoutMainSection">
+            <div class="checkout-form-side">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div class="form-section-title" style="margin-bottom: 0;" data-lang-ar="بيانات التواصل" data-lang-en="Contact Information">بيانات التواصل</div>
+                    <a href="#" style="font-size: 13px; color: #366c65; text-decoration: none;" data-lang-ar="تسجيل الدخول" data-lang-en="Log in">تسجيل الدخول</a>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="userEmail" placeholder="البريد الإلكتروني أو رقم الموبايل" data-lang-ar-placeholder="البريد الإلكتروني أو رقم الموبايل" data-lang-en-placeholder="Email or mobile phone number">
+                </div>
+                
+                <label class="checkbox-group">
+                    <input type="checkbox" checked>
+                    <span data-lang-ar="أرسل لي الأخبار والعروض على البريد الإلكتروني" data-lang-en="Email me with news and offers">أرسل لي الأخبار والعروض على البريد الإلكتروني</span>
+                </label>
+
+                <div class="form-section-title" style="margin-top: 25px;" data-lang-ar="التوصيل" data-lang-en="Shipping Address">التوصيل</div>
+                <div class="form-group">
+                    <select id="userCountry">
+                        <option data-lang-ar="مصر" data-lang-en="Egypt">مصر</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <input type="text" id="userFirstName" placeholder="الاسم الأول" data-lang-ar-placeholder="الاسم الأول" data-lang-en-placeholder="First name">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <input type="text" id="userLastName" placeholder="اسم العائلة" data-lang-ar-placeholder="اسم العائلة" data-lang-en-placeholder="Last name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="userAddress" placeholder="العنوان" data-lang-ar-placeholder="العنوان" data-lang-en-placeholder="Address">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" id="userCity" placeholder="المدينة" data-lang-ar-placeholder="المدينة" data-lang-en-placeholder="City">
+                    </div>
+                    <div class="form-group">
+                        <select id="userGov">
+                            <option data-lang-ar="محافظة القاهرة" data-lang-en="Cairo Governorate">محافظة القاهرة</option>
+                            <option data-lang-ar="محافظة الجيزة" data-lang-en="Giza Governorate">محافظة الجيزة</option>
+                            <option data-lang-ar="محافظة الإسكندرية" data-lang-en="Alexandria Governorate">محافظة الإسكندرية</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="userPhone" placeholder="الموبايل" data-lang-ar-placeholder="الموبايل" data-lang-en-placeholder="Mobile">
+                </div>
+
+                <div class="form-section-title" style="margin-top: 25px;" data-lang-ar="طريقة الشحن" data-lang-en="Shipping Method">طريقة الشحن</div>
+                <div class="shipping-method-box">
+                    <span data-lang-ar="شحن عادي" data-lang-en="Standard Shipping">شحن عادي</span>
+                    <span style="font-weight: 600;">E£ 89.99</span>
+                </div>
+
+                <div class="form-section-title" style="margin-top: 25px;" data-lang-ar="الدفع" data-lang-en="Payment">الدفع</div>
+                <p style="font-size: 13px; color: #666; margin-bottom: 10px;" data-lang-ar="كل المعاملات آمنة ومشفرة." data-lang-en="All transactions are secure and encrypted.">كل المعاملات آمنة ومشفرة.</p>
+
+                <div class="payment-methods-list" id="paymentMethodsGroup">
+                    <div class="payment-item active" onclick="selectOption(this, 'payment', 'الدفع عند الاستلام (COD)')">
+                        <span data-lang-ar="الدفع عند الاستلام (COD)" data-lang-en="Cash on Delivery (COD)">الدفع عند الاستلام (COD)</span>
+                        <input type="radio" name="payment" checked>
+                    </div>
+                    <div class="payment-item" onclick="selectOption(this, 'payment', 'إنستاباي / المحفظة الإلكترونية')">
+                        <span data-lang-ar="إنستاباي / المحفظة الإلكترونية" data-lang-en="InstaPay / E-Wallet">إنستاباي / المحفظة الإلكترونية</span>
+                        <input type="radio" name="payment">
+                    </div>
+                    <div class="payment-item" onclick="selectOption(this, 'payment', 'Pay With Valu')">
+                        <span>Pay With Valu</span>
+                        <input type="radio" name="payment">
+                    </div>
+                </div>
+
+                <button class="btn-complete-order" data-lang-ar="إكمال الطلب" data-lang-en="Complete Order" onclick="completeOrder()">إكمال الطلب</button>
+            </div>
+
+            <div class="order-summary-side">
+                <div id="checkoutItemsList"></div>
+
+                <div class="promo-box">
+                    <input type="text" placeholder="كود خصم أو بطاقة هدية" data-lang-ar-placeholder="كود خصم أو بطاقة هدية" data-lang-en-placeholder="Discount code or gift card">
+                    <button data-lang-ar="تطبيق" data-lang-en="Apply">تطبيق</button>
+                </div>
+
+                <div class="totals-row">
+                    <span data-lang-ar="المجموع الفرعي" data-lang-en="Subtotal">المجموع الفرعي</span>
+                    <span id="subtotalAmount">E£ 0.00</span>
+                </div>
+                <div class="totals-row">
+                    <span data-lang-ar="الشحن" data-lang-en="Shipping">الشحن</span>
+                    <span>E£ 89.99</span>
+                </div>
+                <div class="totals-row final">
+                    <span data-lang-ar="الإجمالي" data-lang-en="Total">الإجمالي</span>
+                    <span id="totalAmount">E£ 0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. قسم رسالة وتفاصيل النجاح (مخفي افتراضياً ولا يفتح صفحات خارجية) -->
+        <div id="orderSuccessSection" class="hidden">
+            <div class="success-container">
+                <div class="success-header">
+                    <div class="success-title-area">
+                        <h2>شكرًا لك، <span id="confirmedUserName"></span>!</h2>
+                        <p>رقم التأكيد: <strong>#YCJH0NJQC</strong></p>
+                    </div>
+                    <div style="font-size: 35px; color: #28a745;">✅</div>
+                </div>
+
+                <div class="success-box-card" style="background: #eef9f0; border-color: #d1e7dd;">
+                    <h3 style="color: #0f5132; border-color: #badbcc; margin-bottom: 8px;">تم تأكيد طلبك</h3>
+                    <p style="margin: 0; color: #155724; font-size: 14px;">سيصلك بريد تأكيد قريباً.</p>
+                </div>
+
+                <div class="success-box-card">
+                    <h3>تفاصيل الطلب</h3>
+                    <div class="success-row">
+                        <span><strong>بيانات التواصل:</strong></span>
+                        <span id="confirmedEmail"></span>
+                    </div>
+                    <div class="success-row">
+                        <span><strong>عنوان الشحن:</strong></span>
+                        <span id="confirmedAddress"></span>
+                    </div>
+                    <div class="success-row">
+                        <span><strong>طريقة الشحن:</strong></span>
+                        <span>شحن عادي</span>
+                    </div>
+                    <div class="success-row">
+                        <span><strong>طريقة الدفع:</strong></span>
+                        <span id="confirmedPayment"></span>
+                    </div>
+                </div>
+
+                <button class="btn-complete-order" onclick="window.location.href='MEMO.HTML'" style="margin-top: 15px;">مواصلة التسوق</button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-content" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <div class="footer-section">
+                <h3>الفنانون والتصميمات</h3>
+                <ul>
+                    <li><a href="#">فان جوخ</a></li>
+                    <li><a href="#">كلود مونيه</a></li>
+                    <li><a href="#">غوستاف كليمت</a></li>
+                    <li><a href="#">ويليام موريس</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>جميع الحقوق محفوظة © 2026 BY MARI</p>
+        </div>
+    </footer>
+
+    <script>
+        let selectedPaymentMethod = "الدفع عند الاستلام (COD)";
+
+        function selectOption(element, groupName, methodName) {
+            const items = element.parentElement.querySelectorAll('.payment-item');
+            items.forEach(item => {
+                item.classList.remove('active');
+                const radio = item.querySelector('input[type="radio"]');
+                if (radio) radio.checked = false;
+            });
+            element.classList.add('active');
+            const currentRadio = element.querySelector('input[type="radio"]');
+            if (currentRadio) currentRadio.checked = true;
+            selectedPaymentMethod = methodName;
+        }
+
+        function loadCheckoutSummary() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let container = document.getElementById('checkoutItemsList');
+            let subtotalEl = document.getElementById('subtotalAmount');
+            let totalEl = document.getElementById('totalAmount');
+
+            container.innerHTML = '';
+            let subtotal = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#777;">السلة فارغة حالياً</p>';
+                subtotalEl.innerText = 'E£ 0.00';
+                totalEl.innerText = 'E£ 89.99';
+                return;
+            }
+
+            cart.forEach(item => {
+                let itemTotal = item.price * (item.quantity || 1);
+                subtotal += itemTotal;
+                container.innerHTML += `
+                    <div class="summary-item">
+                        <div class="summary-item-info">
+                            <div style="position:relative;">
+                                <img src="${item.image}" class="summary-item-img" alt="${item.title}">
+                                <span class="item-badge">${item.quantity || 1}</span>
+                            </div>
+                            <div>
+                                <h4 style="font-size:14px; margin:0 0 5px 0; color:#333;">${item.title}</h4>
+                            </div>
+                        </div>
+                        <div style="font-weight:600; font-size:14px;">E£ ${itemTotal.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+
+            subtotalEl.innerText = `E£ ${subtotal.toFixed(2)}`;
+            let shipping = 89.99;
+            let finalTotal = subtotal + shipping;
+            totalEl.innerText = `E£ ${finalTotal.toFixed(2)}`;
+        }
+
+        function completeOrder() {
+            const firstName = document.getElementById('userFirstName').value.trim();
+            const lastName = document.getElementById('userLastName').value.trim();
+            const fullName = firstName + ' ' + lastName;
+            const email = document.getElementById('userEmail').value.trim();
+            const address = document.getElementById('userAddress').value.trim();
+            const city = document.getElementById('userCity').value.trim();
+            const gov = document.getElementById('userGov').value;
+            const phone = document.getElementById('userPhone').value.trim();
+
+            if(!fullName || !email || !address || !phone) {
+                alert('الرجاء استكمال بيانات التواصل وعنوان الشحن قبل إكمال الطلب.');
+                return;
+            }
+
+            // جمع تفاصيل سلة المشتريات
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let cartDetails = "";
+            cart.forEach(item => {
+                cartDetails += `- ${item.title} (الكمية: ${item.quantity || 1}) - E£ ${item.price * (item.quantity || 1)}\n`;
+            });
+
+            let totalVal = document.getElementById('totalAmount').innerText;
+            let fullAddress = `${address}, ${city}, ${gov}, مصر - ${phone}`;
+
+            // تجهيز المتغيرات بالأسماء الصحيحة المتطابقة مع قالب EmailJS
+            const templateParams = {
+                to_email: "bymariii2000@gmail.com",
+                name: fullName,
+                email: email,
+                phone: phone,
+                address: fullAddress,
+                payment: selectedPaymentMethod,
+                products: cartDetails,
+                total: totalVal
+            };
+
+            // تم ربط الخدمة والقالب بالقيم الخاصة بك
+            emailjs.send("service_09yf1yw", "template_493y9jr", templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                }, function(error) {
+                    console.log('FAILED...', error);
+                });
+
+            // ملء بيانات النجاح في واجهة المستخدم فوراً
+            document.getElementById('confirmedUserName').innerText = fullName;
+            document.getElementById('confirmedEmail').innerText = email;
+            document.getElementById('confirmedAddress').innerText = fullAddress;
+            document.getElementById('confirmedPayment').innerText = `${selectedPaymentMethod} (${totalVal})`;
+
+            // إخفاء صفحة الدفع وإظهار شاشة النجاح في نفس الصفحة بسلاسة
+            document.getElementById('checkoutMainSection').classList.add('hidden');
+            document.getElementById('orderSuccessSection').classList.remove('hidden');
+
+            // تفريغ سلة المشتريات
+            localStorage.removeItem('cart');
+        }
+
+        const langToggleBtn = document.getElementById('langToggleBtn');
+        const htmlRoot = document.getElementById('htmlRoot');
+
+        function setLanguage(lang) {
+            if (lang === 'en') {
+                htmlRoot.setAttribute('lang', 'en');
+                htmlRoot.setAttribute('dir', 'ltr');
+                if (langToggleBtn) langToggleBtn.innerText = 'العربية 🌐';
+                localStorage.setItem('site_lang', 'en');
+            } else {
+                htmlRoot.setAttribute('lang', 'ar');
+                htmlRoot.setAttribute('dir', 'rtl');
+                if (langToggleBtn) langToggleBtn.innerText = 'English 🌐';
+                localStorage.setItem('site_lang', 'ar');
+            }
+
+            document.querySelectorAll('[data-lang-ar]').forEach(el => {
+                const text = el.getAttribute(`data-lang-${lang}`);
+                if (text) el.innerText = text;
+            });
+
+            document.querySelectorAll('[data-lang-ar-placeholder]').forEach(el => {
+                const ph = el.getAttribute(`data-lang-${lang}-placeholder`);
+                if (ph) el.setAttribute('placeholder', ph);
+            });
+        }
+
+        if (langToggleBtn) {
+            langToggleBtn.addEventListener('click', () => {
+                const currentLang = htmlRoot.getAttribute('lang');
+                setLanguage(currentLang === 'ar' ? 'en' : 'ar');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('site_lang') || 'ar';
+            setLanguage(savedLang);
+            loadCheckoutSummary();
+        });
+    </script>
+</body>
+</html>

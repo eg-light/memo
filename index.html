@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أوريجينال | حقيبتك تكمل أناقتك</title>
+    <!-- Google Fonts - Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style_animated.css">
+    <link rel="stylesheet" href="FONT.css">
+</head>
+<body>
+
+    <!-- 🔝 Navbar -->
+<!-- 🔝 Navbar -->
+    <header class="navbar-container">
+        <div class="nav-content container">
+            <div class="logo">
+                <a href="#" onclick="showSection('home')" class="brand-logo-font">BY MARI</a>
+            </div>
+            <nav class="nav-links" id="navLinks">
+                <a href="#" onclick="showSection('home')" class="active">الرئيسية</a>
+                <a href="#" onclick="showSection('shop')">المنتجات</a>
+                <a href="#" onclick="showSection('home'); scrollToSection('about')">عن البراند</a>
+                <a href="#" onclick="showSection('home'); scrollToSection('footer')">تواصل معنا</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="icon-btn" onclick="toggleSearchModal()" title="بحث"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="icon-btn" onclick="openWishlist()" title="المفضلة">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="badge" id="wishlistCount">0</span>
+                </button>
+                <button class="icon-btn cart-icon-btn" onclick="toggleCart()" title="السلة">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="badge" id="cartCount">0</span>
+                </button>
+                <button class="icon-btn menu-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 🔍 Search Modal -->
+    <div class="search-modal" id="searchModal">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="ابحث عن شنطة..." oninput="handleSearch(this.value)">
+            <button onclick="toggleSearchModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </div>
+
+    <!-- MAIN VIEWS CONTAINER -->
+    <main id="mainContainer">
+
+        <!-- 🏠 HOME VIEW -->
+        <section id="homeView" class="page-view">
+            <!-- 🎯 Hero Section -->
+            <section class="hero">
+                <div class="container hero-grid">
+                    <div class="hero-text">
+                        <span class="badge-new">New Collection 2026</span>
+                        <h1>حقيبتك... تكمل أناقتك</h1>
+                        <p>تصاميم عصرية فاخرة تلبي كافة احتياجاتك اليومية والمناسبات الخاصة بجودة فائقة.</p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary" onclick="showSection('shop')">تسوق الآن</button>
+                            <button class="btn btn-outline" style="border-color: #fff; color: #fff;" onclick="scrollToSection('categories')">اكتشف المجموعة</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 👜 Categories Section -->
+            <section class="categories-section container" id="categories">
+                <div class="section-title">
+                    <h2>اكتشف مجموعتنا</h2>
+                    <p>تسوق حسب التصنيف المفضل لديك</p>
+                </div>
+                <div class="categories-grid" id="categoriesGrid"></div>
+            </section>
+
+            <!-- 🔥 Best Sellers Section -->
+            <section class="products-section container">
+                <div class="section-title">
+                    <h2>الأكثر مبيعًا</h2>
+                    <p>القطع الأكثر طلباً وإعجاباً من عملائنا</p>
+                </div>
+                <div class="products-grid" id="bestSellersGrid"></div>
+            </section>
+
+            <!-- ✨ New Collection Banner -->
+            <section class="collection-banner container">
+                <div class="banner-content">
+                    <span>NEW COLLECTION</span>
+                    <h2>مجموعة الخريف 2026</h2>
+                    <p>اكتشف أحدث تصميماتنا المصنوعة بعناية لتناسب ذوقك الراقي.</p>
+                    <button class="btn btn-light" onclick="showSection('shop')">اكتشف المجموعة</button>
+                </div>
+            </section>
+
+            <!-- 🏷️ Offers Section -->
+            <section class="offers-section container">
+                <div class="offer-box">
+                    <div class="offer-info">
+                        <span class="discount-badge">خصم يصل إلى 30%</span>
+                        <h3>عرض الموسم الخاص</h3>
+                        <p>استخدم كود الخصم عند الدفع لتوفير أكثر.</p>
+                        <div class="code-box">
+                            <span>كود الخصم: <strong>BAGS30</strong></span>
+                        </div>
+                        <button class="btn btn-primary" onclick="showSection('shop')">تسوق العرض الآن</button>
+                    </div>
+                    <div class="offer-timer" id="countdownTimer">
+                        <div class="time-item"><span>02</span>أيام</div>
+                        <div class="time-item"><span>14</span>ساعة</div>
+                        <div class="time-item"><span>35</span>دقيقة</div>
+                        <div class="time-item"><span>22</span>ثانية</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ⭐ Why Us Section -->
+            <section class="why-us container">
+                <div class="why-grid">
+                    <div class="why-card">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <h4>شحن سريع</h4>
+                        <p>نوصل طلبك بأسرع وقت لجميع المحافظات.</p>
+                    </div>
+                    <div class="why-card">
+                        <i class="fa-solid fa-lock"></i>
+                        <h4>دفع آمن</h4>
+                        <p>طرق دفع متعددة آمنة ومريحة.</p>
+                    </div>
+                    <div class="why-card">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <h4>استبدال سهل</h4>
+                        <p>سياسة استبدال واسترجاع واضحة.</p>
+                    </div>
+                    <div class="why-card">
+                        <i class="fa-solid fa-gem"></i>
+                        <h4>جودة مضمونة</h4>
+                        <p>منتجات مختارة بعناية فائقة.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 📸 Instagram Section -->
+            <section class="instagram-section container">
+                <div class="section-title">
+                    <h2>تابعنا على Instagram</h2>
+                    <p>شاركنا أناقتك باستخدام هاشتاج #BagsStore</p>
+                </div>
+                <div class="insta-grid">
+                    <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=300&q=80" alt="Insta">
+                    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=300&q=80" alt="Insta">
+                    <img src="https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?auto=format&fit=crop&w=300&q=80" alt="Insta">
+                    <img src="https://images.unsplash.com/photo-1591561954557-26941169b49e?auto=format&fit=crop&w=300&q=80" alt="Insta">
+                </div>
+            </section>
+
+            <!-- 💬 Reviews Section -->
+            <section class="reviews-section container">
+                <div class="section-title">
+                    <h2>عملاؤنا يتحدثون عنا</h2>
+                    <p>آراء حقيقية من عملائنا المميزين</p>
+                </div>
+                <div class="reviews-grid">
+                    <div class="review-card">
+                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p>"الشنطة أجمل من الصور والخامة ممتازة جداً، التوصيل كان سريع."</p>
+                        <div class="author">
+                            <strong>سارة أحمد</strong>
+                            <span><i class="fa-solid fa-circle-check"></i> شراء مؤكد</span>
+                        </div>
+                    </div>
+                    <div class="review-card">
+                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p>"خدمة العملاء رائعة والمنتج فخم بكل ما تحمله الكلمة من معنى."</p>
+                        <div class="author">
+                            <strong>منى محمد</strong>
+                            <span><i class="fa-solid fa-circle-check"></i> شراء مؤكد</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🏷️ About Brand -->
+            <section class="about-brand container" id="about">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2>عن براند أوريجينال</h2>
+                        <p>نحن نؤمن أن الشنطة ليست مجرد قطعة تستخدمها، بل هي جزء أساسي من شخصيتك وأناقتك اليومية. نصمم حقائبنا بعناية لتجمع بين العملية والفخامة.</p>
+                        <button class="btn btn-outline">اعرف قصتنا</button>
+                    </div>
+                    <div class="about-img">
+                        <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=500&q=80" alt="About">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 📩 Newsletter -->
+            <section class="newsletter-section">
+                <div class="container newsletter-box">
+                    <h3>لا تفوت أحدث العروض</h3>
+                    <p>احصل على خصم 10% على أول طلب عند الاشتراك في القائمة البريدية.</p>
+                    <form onsubmit="event.preventDefault(); alert('تم الاشتراك بنجاح!');">
+                        <input type="email" placeholder="اكتب بريدك الإلكتروني..." required>
+                        <button type="submit" class="btn btn-primary">اشترك</button>
+                    </form>
+                </div>
+            </section>
+        </section>
+
+        <!-- 🛍️ SHOP VIEW -->
+        <section id="shopView" class="page-view" style="display: none;">
+            <div class="container shop-container">
+                <div class="shop-header">
+                    <h2>جميع المنتجات</h2>
+                    <div class="shop-controls">
+                        <select id="sortSelect" onchange="sortProducts(this.value)">
+                            <option value="default">الترتيب الافتراضي</option>
+                            <option value="latest">الأحدث</option>
+                            <option value="low-high">السعر من الأقل للأعلى</option>
+                            <option value="high-low">السعر من الأعلى للأقل</option>
+                            <option value="popular">الأكثر مبيعًا</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="shop-layout">
+                    <aside class="filter-sidebar">
+                        <h3>التصنيفات</h3>
+                        <ul id="categoryFilterList">
+                            <li><button class="active" onclick="filterCategory('all')">كل المنتجات</button></li>
+                        </ul>
+                    </aside>
+                    <div class="shop-products-grid" id="shopProductsGrid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 👜 PRODUCT DETAILS VIEW -->
+        <section id="productDetailsView" class="page-view" style="display: none;">
+            <div class="container product-details-container" id="productDetailsContent"></div>
+        </section>
+
+        <!-- 💳 CHECKOUT VIEW -->
+        <section id="checkoutView" class="page-view" style="display: none;">
+            <div class="container checkout-container">
+                <h2>إتمام الطلب</h2>
+                <div class="checkout-grid">
+                    <form class="checkout-form" onsubmit="submitOrder(event)">
+                        <h3>بيانات الشحن</h3>
+                        <div class="form-group">
+                            <label>الاسم الكامل</label>
+                            <input type="text" id="custName" required placeholder="ادخل اسمك الكامل">
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الهاتف</label>
+                            <input type="tel" id="custPhone" required placeholder="01xxxxxxxxx">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>المحافظة</label>
+                                <select id="custState" required>
+                                    <option value="">اختر المحافظة</option>
+                                    <option value="Cairo">القاهرة</option>
+                                    <option value="Giza">الجيزة</option>
+                                    <option value="Alex">الإسكندرية</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>المدينة</label>
+                                <input type="text" id="custCity" required placeholder="المدينة / المنطقة">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>العنوان بالتفصيل</label>
+                            <textarea id="custAddress" required placeholder="اسم الشارع، رقم العُمارة، الشقة"></textarea>
+                        </div>
+                        
+                        <h3>طريقة الدفع</h3>
+                        <div class="payment-methods">
+                            <label class="pay-option">
+                                <input type="radio" name="payment" value="cod" checked>
+                                <span>💵 الدفع عند الاستلام</span>
+                            </label>
+                            <label class="pay-option">
+                                <input type="radio" name="payment" value="card">
+                                <span>💳 الدفع الإلكتروني (بطاقة ائتمان)</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">تأكيد الطلب</button>
+                    </form>
+
+                    <div class="order-summary-box">
+                        <h3>ملخص الطلب</h3>
+                        <div id="checkoutItemsList"></div>
+                        <hr>
+                        <div class="summary-row"><span>المجموع الفرعي</span><span id="subTotalAmount">0 EGP</span></div>
+                        <div class="summary-row"><span>الشحن</span><span>50 EGP</span></div>
+                        <div class="summary-row total"><span>الإجمالي النهائي</span><span id="finalTotalAmount">0 EGP</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🎉 SUCCESS ORDER VIEW -->
+        <section id="successView" class="page-view" style="display: none;">
+            <div class="container success-container">
+                <i class="fa-solid fa-circle-check success-icon"></i>
+                <h2>تم استلام طلبك بنجاح!</h2>
+                <p>رقم الطلب الخاص بك: <strong id="orderNumberID">#BS-9842</strong></p>
+                <p>سنتواصل معك قريباً لتأكيد تفاصيل الشحن.</p>
+                <button class="btn btn-primary" onclick="showSection('home')">العودة للرئيسية</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 🛒 CART SIDEBAR -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>سلة المشتريات</h3>
+            <button onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cartItemsContainer"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>الإجمالي:</span>
+                <strong id="cartTotalPrice">0 EGP</strong>
+            </div>
+            <button class="btn btn-primary btn-block" onclick="proceedToCheckout()">إتمام الطلب</button>
+        </div>
+    </div>
+
+    <!-- ❤️ WISHLIST MODAL -->
+    <div class="cart-overlay" id="wishlistOverlay" onclick="openWishlist()"></div>
+    <div class="cart-sidebar" id="wishlistSidebar">
+        <div class="cart-header">
+            <h3>المنتجات المفضلة</h3>
+            <button onclick="openWishlist()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="wishlistItemsContainer"></div>
+    </div>
+
+    <!-- 🦶 Footer -->
+    <footer class="footer" id="footer">
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <h3>Bags<strong>Store</strong></h3>
+                <p>وجهتك الأولى للحقائب النسائية والرجالية الفاخرة بأفضل الأسعار وأعلى جودة.</p>
+            </div>
+            <div class="footer-col">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="#" onclick="showSection('home')">الرئيسية</a></li>
+                    <li><a href="#" onclick="showSection('shop')">الشنط</a></li>
+                    <li><a href="#" onclick="showSection('shop')">اللوح</a></li>
+                    <li><a href="#" onclick="scrollToSection('categories')">التصنيفات</a></li>
+                    <li><a href="#" onclick="scrollToSection('about')">عن البراند</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>خدمة العملاء</h4>
+                <ul>
+                    <li><a href="#">الشحن والتوصيل</a></li>
+                    <li><a href="#">الاستبدال والاسترجاع</a></li>
+                    <li><a href="#">الأسئلة الشائعة</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>تواصل معنا</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-solid fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Bags Store — جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Link -->
+    <script src="script.js"></script>
+</body>
+</html>

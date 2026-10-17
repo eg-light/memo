@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Against';
+    src: url('against\ regular.otf') format('truetype'); /* تأكد أن مسار الملف بنفس المجلد لديك */
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* ثم تستخدمه في الموقع هكذا */
+body {
+    font-family: 'Against', sans-serif;
+}
